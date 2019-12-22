@@ -32,4 +32,4 @@
 
 .. code-block:: text
 
-    python3 bot.py
+    python bot.py
