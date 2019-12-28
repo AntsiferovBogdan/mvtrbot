@@ -1,7 +1,7 @@
 import logging
 
 from telegram.ext import (Updater, CommandHandler, 
-            MessageHandler, Filters)
+            MessageHandler, Filters, ConversationHandler)
 
 from handlers import *
 import settings
@@ -21,7 +21,16 @@ def main():
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler('start', greet_user, pass_user_data=True))
     
-    
+    registration = ConversationHandler(
+        entry_points=[(MessageHandler(Filters.regex('Зарегистрироваться'), registration_start, pass_user_data=True))],
+        states={
+            'email': [MessageHandler(Filters.text, registration_get_email, pass_user_data=True)]
+        },
+        fallbacks=[MessageHandler(Filters.photo | Filters.video | Filters.document, dontknow, pass_user_data=True)]
+    )
+    dp.add_handler(registration)
+
+
     mybot.start_polling()
     mybot.idle()
 

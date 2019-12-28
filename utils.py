@@ -1,6 +1,7 @@
 from random import choice
 
 from emoji import emojize
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 
 import settings
 
@@ -10,3 +11,7 @@ def get_user_emoji(user_data):
     else:
         user_data['emoji'] = emojize(choice(settings.USER_EMOJI), use_aliases=True)
         return user_data['emoji']
+
+def get_keyboard():
+	my_keyboard = ReplyKeyboardMarkup([['Зарегистрироваться']], resize_keyboard=True)
+	return my_keyboard
