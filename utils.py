@@ -12,6 +12,7 @@ def get_user_emoji(user_data):
         user_data['emoji'] = emojize(choice(settings.USER_EMOJI), use_aliases=True)
         return user_data['emoji']
 
+
 def get_keyboard():
 	my_keyboard = ReplyKeyboardMarkup([['Зарегистрироваться']], resize_keyboard=True)
 	return my_keyboard
