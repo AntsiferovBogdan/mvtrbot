@@ -3,6 +3,7 @@ cffi==1.13.2
 cryptography==2.8
 emoji==0.5.4
 future==0.18.2
+pycodestyle==2.5.0
 pycparser==2.19
 PySocks==1.7.1
 python-telegram-bot==12.2.0
