@@ -1,11 +1,9 @@
-import sqlalchemy
+from sqlalchemy import *
 
-db = sqlalchemy()
+md = MetaData()
 
-class Users(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        user = db.Column(db.String, nullable=False)
-        email = db.Column(db.String, unique=True, nullable=False)
-    
-        def __repr__(self):
-            return '<Users {} {}>'.format(self.user, self.email)
+Users_tab = Table('Users_tab', md,
+                  Column('id', Integer, primary_key=True),
+                  Column('user', String, nullable=False),
+                  Column('email', String, unique=True, nullable=False)
+                  )
