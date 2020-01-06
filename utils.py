@@ -5,14 +5,19 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 
 import settings
 
+
 def get_user_emoji(user_data):
     if 'emoji' in user_data:
         return user_data['emoji']
     else:
-        user_data['emoji'] = emojize(choice(settings.USER_EMOJI), use_aliases=True)
+        user_data['emoji'] = emojize(
+            choice(settings.USER_EMOJI), use_aliases=True
+            )
         return user_data['emoji']
 
 
 def get_keyboard():
-	my_keyboard = ReplyKeyboardMarkup([['Зарегистрироваться']], resize_keyboard=True)
-	return my_keyboard
+    my_keyboard = ReplyKeyboardMarkup(
+        [['Зарегистрироваться']], resize_keyboard=True
+        )
+    return my_keyboard
