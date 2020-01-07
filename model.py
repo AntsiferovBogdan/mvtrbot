@@ -15,3 +15,4 @@ engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
 
 Session = sessionmaker(bind=engine)
 session = Session()
+

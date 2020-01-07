@@ -56,3 +56,4 @@ def add_user(user_id, user_email):
                          )
     Session.add(new_user)
     Session.commit()
+
