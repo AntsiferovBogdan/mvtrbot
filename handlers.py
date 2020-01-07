@@ -54,6 +54,5 @@ def add_user(user_id, user_email):
     new_user = Users_tab(id=user_id,
                          email=user_email
                          )
-    Session(engine)
     Session.add(new_user)
     Session.commit()
