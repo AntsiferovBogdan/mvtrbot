@@ -14,4 +14,4 @@ Users_tab = Table('Users_tab', metadata,
 engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
 
 Session = sessionmaker(bind=engine)
-Session.configure(bind=engine)
+session = Session()
