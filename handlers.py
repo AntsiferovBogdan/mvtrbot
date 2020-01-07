@@ -1,6 +1,6 @@
 import logging
 
-from model import Users_tab, md
+from model import *
 from utils import *
 
 import re
@@ -27,6 +27,7 @@ def registration_start(bot, update, user_data):
 
 def registration_get_email(bot, update, user_data):
     user_email = update.message.text
+    user_id = update.message.chat.id
     pattern = re.compile(
                          r'^[\w\.]+[-\w]+@+([\w]([-\w]{0,61}[\w])\.)+[a-zA-Z]{2,6}$'
                          )
@@ -37,7 +38,7 @@ def registration_get_email(bot, update, user_data):
                      update.message.text
                      )
         update.message.reply_text('Спасибо!')
-        add_user(update)
+        add_user(user_id, user_email)
     else:
         update.message.reply_text('Проверьте корректность введенного e-mail')
         return 'email'
@@ -49,10 +50,10 @@ def dontknow(bot, update, user_data):
     return 'email'
 
 
-def add_user(update):
-    new_user = Users_tab(id=update.message.chat.id,
-                         user=update.message.chat.username,
-                         email=update.message.text
+def add_user(user_id, user_email):
+    new_user = Users_tab(id=user_id,
+                         email=user_email
                          )
-    md.session.add(new_user)
-    md.session.commit()
+    session = Session()
+    metadata.session.add(new_user)
+    metadata.session.commit()

@@ -1,9 +1,17 @@
-from sqlalchemy import *
+from sqlalchemy import MetaData, Table, Column, Integer, String, create_engine
+from sqlalchemy.orm import sessionmaker
 
-md = MetaData()
+import settings
 
-Users_tab = Table('Users_tab', md,
+
+metadata = MetaData()
+
+Users_tab = Table('Users_tab', metadata,
                   Column('id', Integer, primary_key=True),
-                  Column('user', String, nullable=False),
                   Column('email', String, unique=True, nullable=False)
                   )
+
+engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
+
+Session = sessionmaker(bind=engine)
+Session.configure(bind=engine)
