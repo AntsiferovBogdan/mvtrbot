@@ -4,7 +4,9 @@ from telegram.ext import (Updater, CommandHandler,
                           MessageHandler, Filters, ConversationHandler
                           )
 
-from handlers import *
+from handlers import (greet_user, registration_start,
+                      registration_get_email, dontknow
+                      )
 
 import settings
 
@@ -28,7 +30,9 @@ def main():
                       registration_start, pass_user_data=True))
                       ],
         states={
-            'email': [MessageHandler(Filters.text, registration_get_email, pass_user_data=True)]
+            'email': [MessageHandler(Filters.text, registration_get_email,
+                      pass_user_data=True)
+                      ]
         },
         fallbacks=[MessageHandler(
                                   Filters.photo | Filters.video | Filters.document,
