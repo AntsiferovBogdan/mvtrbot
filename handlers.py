@@ -1,7 +1,9 @@
 import logging
 
-from model import *
-from utils import *
+from model import Users, session
+from utils import get_keyboard, get_user_emoji
+
+from telegram import ReplyKeyboardRemove
 
 import re
 
@@ -51,8 +53,6 @@ def dontknow(bot, update, user_data):
 
 
 def add_user(user_id, user_email):
-    new_user = Users_tab(id=user_id,
-                         email=user_email
-                         )
-    session.add(new_user)
+    users = Users(user_id=user_id, user_email=user_email)
+    session.add(users)
     session.commit()
