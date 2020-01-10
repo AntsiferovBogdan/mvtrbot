@@ -35,7 +35,8 @@ def main():
                       ]
         },
         fallbacks=[MessageHandler(
-                                  Filters.photo | Filters.video | Filters.document,
+                                  Filters.photo | Filters.video |
+                                  Filters.document,
                                   dontknow, pass_user_data=True
                                   )]
     )
