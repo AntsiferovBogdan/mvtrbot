@@ -36,8 +36,8 @@ def main():
         },
         fallbacks=[MessageHandler(
                                   Filters.photo | Filters.video |
-                                  Filters.document,
-                                  dontknow, pass_user_data=True
+                                  Filters.document, dontknow,
+                                  pass_user_data=True
                                   )]
     )
     dp.add_handler(registration)
