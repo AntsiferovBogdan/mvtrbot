@@ -3,7 +3,9 @@ import logging
 from model import Users, session
 from utils import get_keyboard, get_user_emoji
 
+from sqlalchemy import exists
 from telegram import ReplyKeyboardRemove
+from telegram.ext import ConversationHandler
 
 import re
 
@@ -53,6 +55,10 @@ def dontknow(bot, update, user_data):
 
 
 def add_user(user_id, user_email):
-    users = Users(user_id=user_id, user_email=user_email)
-    session.add(users)
-    session.commit()
+    check_db = session.query(exists().where(Users.user_id == user_id)).scalar()
+    if check_db is False:
+        users = Users(user_id=user_id, user_email=user_email)
+        session.add(users)
+        session.commit()
+    else:
+        return ConversationHandler.END
