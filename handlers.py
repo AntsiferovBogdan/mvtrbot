@@ -3,11 +3,12 @@ import logging
 from model import Users, session
 from utils import get_keyboard, get_user_emoji
 
-from sqlalchemy import exists
+from sqlalchemy import create_engine
 from telegram import ReplyKeyboardRemove
 from telegram.ext import ConversationHandler
 
 import re
+import settings
 
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
@@ -31,7 +32,6 @@ def registration_start(bot, update, user_data):
 
 def registration_get_email(bot, update, user_data):
     user_email = update.message.text
-    user_id = update.message.chat.id
     pattern = re.compile(
                          r'^[\w\.]+[-\w]+@+([\w]([-\w]{0,61}[\w])\.)+[a-zA-Z]{2,6}$'
                          )
@@ -41,12 +41,10 @@ def registration_get_email(bot, update, user_data):
                      update.message.chat.id,
                      update.message.text
                      )
-        update.message.reply_text('Спасибо!')
-        add_user(user_id, user_email)
+        add_user(bot, update, user_data)
     else:
         update.message.reply_text('Проверьте корректность введенного e-mail')
         return 'email'
-    return ConversationHandler.END
 
 
 def dontknow(bot, update, user_data):
@@ -54,11 +52,24 @@ def dontknow(bot, update, user_data):
     return 'email'
 
 
-def add_user(user_id, user_email):
-    check_db = session.query(exists().where(Users.user_id == user_id)).scalar()
-    if check_db is False:
-        users = Users(user_id=user_id, user_email=user_email)
-        session.add(users)
-        session.commit()
-    else:
-        return ConversationHandler.END
+def add_user(bot, update, user_data):
+    user_email = update.message.text
+    user_id = update.message.chat.id
+
+    engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
+    connect = engine.connect()
+    check_user = connect.execute('SELECT * FROM Users')
+
+    for user in check_user:
+        if user[1] == user_id:
+            update.message.reply_text('Вы уже зарегистрированы.')
+            return ConversationHandler.END
+        elif user[2] == user_email:
+            update.message.reply_text('Данный e-mail уже используется, введите другой адрес.')
+            return 'email'
+
+    users = Users(user_id=user_id, user_email=user_email)
+    session.add(users)
+    session.commit()
+    update.message.reply_text('Спасибо!')
+    return ConversationHandler.END
