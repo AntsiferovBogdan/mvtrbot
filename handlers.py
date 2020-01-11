@@ -65,7 +65,9 @@ def add_user(bot, update, user_data):
             update.message.reply_text('Вы уже зарегистрированы.')
             return ConversationHandler.END
         elif user[2] == user_email:
-            update.message.reply_text('Данный e-mail уже используется, введите другой адрес.')
+            update.message.reply_text(
+                'Данный e-mail уже используется, введите другой адрес.'
+                )
             return 'email'
 
     users = Users(user_id=user_id, user_email=user_email)
