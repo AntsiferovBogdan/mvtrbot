@@ -27,17 +27,15 @@ def main():
 
     registration = ConversationHandler(
         entry_points=[(MessageHandler(Filters.regex('Зарегистрироваться'),
-                      registration_start, pass_user_data=True))
+                      registration_start))
                       ],
         states={
-            'email': [MessageHandler(Filters.text, registration_get_email,
-                      pass_user_data=True)
+            'email': [MessageHandler(Filters.text, registration_get_email)
                       ]
         },
         fallbacks=[MessageHandler(
                                   Filters.photo | Filters.video |
-                                  Filters.document, dontknow,
-                                  pass_user_data=True
+                                  Filters.document, dontknow
                                   )]
     )
     dp.add_handler(registration)
