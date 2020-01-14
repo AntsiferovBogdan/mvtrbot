@@ -17,8 +17,8 @@ def get_html(url):
 def get_price(html):
     if html:
         soup = BeautifulSoup(html, 'html.parser')
-        movie_name = re.findall(r'\w*', soup.h1.string)
-        print(movie_name[1])
+        movie_name = re.findall(r'\w+', soup.h1.string)
+        print(movie_name[0])
     return False
 
 
