@@ -1,3 +1,4 @@
+import re
 import requests
 
 from bs4 import BeautifulSoup
@@ -13,14 +14,13 @@ def get_html(url):
         return False
 
 
-def get_movie_price(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    new_list = soup.find('', class_='')
-    print(new_list)
-
-
-if __name__ == '__main__':
-    html = get_html('online_cinema_url')
+def get_price(html):
     if html:
-        with open('movies_price_list.html', 'w', encoding='utf8') as f:
-            f.write(html)
+        soup = BeautifulSoup(html, 'html.parser')
+        movie_name_only = re.findall(r'\w*', soup.h1.string)
+        print(movie_name_only[1])
+    return False
+
+
+html = get_html('https://okko.tv/movie/joker')
+get_price(html)
