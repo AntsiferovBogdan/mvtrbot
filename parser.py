@@ -18,9 +18,9 @@ def get_price(html):
     if html:
         soup = BeautifulSoup(html, 'html.parser')
         movie_name = re.findall(r'\w+', soup.h1.string)
-        print(movie_name[0])
+        print(' '.join(movie_name[:-2:]))
     return False
 
 
-html = get_html('https://okko.tv/movie/joker')
+html = get_html('https://okko.tv/movie/the-twilight-saga-breaking-dawn-part-2')
 get_price(html)
