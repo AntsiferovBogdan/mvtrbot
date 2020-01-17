@@ -1,4 +1,3 @@
-import re
 import requests
 
 from bs4 import BeautifulSoup
@@ -17,10 +16,10 @@ def get_html(url):
 def get_price(html):
     if html:
         soup = BeautifulSoup(html, 'html.parser')
-        movie_name = re.findall(r'\w+', soup.h1.string)
-        print(' '.join(movie_name[:-2:]))
+        for a in soup.find_all('a', href=True):
+            print(a)
     return False
 
 
-html = get_html('https://okko.tv/movie/the-twilight-saga-breaking-dawn-part-2')
+html = get_html('https://okko.tv/search/' + input())
 get_price(html)
