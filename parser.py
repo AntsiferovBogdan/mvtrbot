@@ -70,8 +70,12 @@ user_input = input()
 user_input_del_spaces = user_input.split()
 user_input_no_spaces = '+'.join(user_input_del_spaces)
 
-html_ivi = get_html('https://www.ivi.ru/search/?q=' + user_input_no_spaces)
-html_megogo = get_html('https://megogo.ru/ru/search-extended?q=' + user_input_no_spaces)
+html_ivi = get_html(
+    'https://www.ivi.ru/search/?q=' + user_input_no_spaces
+    )
+html_megogo = get_html(
+    'https://megogo.ru/ru/search-extended?q=' + user_input_no_spaces
+    )
 
 get_url_ivi(html_ivi)
 get_url_megogo(html_megogo)
