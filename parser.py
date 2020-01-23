@@ -3,9 +3,6 @@ import settings
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 def get_html(url):
@@ -49,13 +46,24 @@ def get_url_megogo(html_megogo):
         list_megogo = []
         if search:
             list_megogo.append(search['href'])
-        print(f'Смотрите фильм {user_input.capitalize()} в онлайн-кинотеатре megogo: megogo.ru{list_megogo[0]}')
+        watch_megogo = 'megogo.ru' + list_megogo[0]
+        print(f'Смотрите фильм {user_input.capitalize()} в онлайн-кинотеатре megogo: {watch_megogo}')
+
+        driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL)
+        driver.get('http://' + watch_megogo)
+        element = driver.find_element_by_class_name("//button[@class='btn type-fill watch']")
+        element.click()
+
+        price_page = driver.page_source
+        soup = BeautifulSoup(price_page, 'html.parser')
+        search = soup.find(class_='plateTile__caption')
+        print(search)
     return False
 
 
 user_input = input()
 user_input_del_spaces = user_input.split()
-user_input_no_spaces = '-'.join(user_input_del_spaces)
+user_input_no_spaces = '+'.join(user_input_del_spaces)
 
 html_ivi = get_html('https://www.ivi.ru/search/?q=' + user_input_no_spaces)
 html_megogo = get_html('https://megogo.ru/ru/search-extended?q=' + user_input_no_spaces)
