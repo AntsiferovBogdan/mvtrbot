@@ -29,7 +29,9 @@ def get_url_ivi(html_ivi):
         driver.get('http://' + watch_ivi)
         element = driver.find_element_by_id('js-erotic-confirm')
         element.click()
-        element = driver.find_element_by_xpath("//button[@data-test='buy_content']")
+        element = driver.find_element_by_xpath(
+            "//button[@data-test='buy_content']"
+            )
         element.click()
 
         price_page = driver.page_source
@@ -42,7 +44,8 @@ def get_url_ivi(html_ivi):
 def get_url_megogo(html_megogo):
     if html_megogo:
         soup = BeautifulSoup(html_megogo, 'html.parser')
-        search = soup.find('div', class_='card-content video-content').find('a')
+        search = soup.find('div',
+                           class_='card-content video-content').find('a')
         list_megogo = []
         if search:
             list_megogo.append(search['href'])
@@ -51,7 +54,9 @@ def get_url_megogo(html_megogo):
 
         driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL)
         driver.get('http://' + watch_megogo)
-        element = driver.find_element_by_class_name("//button[@class='btn type-fill watch']")
+        element = driver.find_element_by_xpath(
+            "//button[@class='btn type-fill watch']"
+            )
         element.click()
 
         price_page = driver.page_source
