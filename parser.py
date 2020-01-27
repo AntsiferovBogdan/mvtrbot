@@ -5,6 +5,7 @@ import settings
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 
 
 def get_html(url):
@@ -20,31 +21,53 @@ def get_html(url):
 def get_url_ivi(html_ivi):
     if html_ivi:
         soup = BeautifulSoup(html_ivi, 'html.parser')
-        search = soup.find('li', class_='gallery__item').find('a')
+        search_title = soup.find(class_='nbl-slimPosterBlock__title')
+        title = ''.join(re.findall(r'[а-я А-Я0-9]', search_title.text))
+        search_year = soup.find_all(class_='nbl-poster__propertiesRow')
+        year = re.findall(r'\d{4}', search_year[1].text)
+        search_poster = soup.find(class_='nbl-poster__image')
+        poster = search_poster['src'].split('/172')
+        if year:
+            print(
+                f"Вас интересует данный фильм? {title}, {year[0]} {poster[0]}"
+                )
+        else:
+            year = re.findall(r'\d{4}', search_year[2].text)
+            print(
+                f"Вас интересует данный фильм? {title}, {year[0]} {poster[0]}"
+                )
+
+        search_url = soup.find('li', class_='gallery__item').find('a')
         list_ivi = []
 
-        if search:
-            list_ivi.append(search['href'])
+        if search_url:
+            list_ivi.append(search_url['href'])
         watch_ivi = 'ivi.ru' + list_ivi[0]
-        print(f'Смотрите {user_input.capitalize()} в онлайн-кинотеатре ivi: {watch_ivi}')
+        print(f"Смотрите фильм '{title}' в онлайн-кинотеатре ivi: {watch_ivi}")
 
         driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL)
         driver.get('http://' + watch_ivi)
-        element_1 = driver.find_element_by_id('js-erotic-confirm')
-        element_1.click()
-        element_2 = driver.find_element_by_class_name(
-            'playerBlock__nbl-button_playerMainAction'
-            )
-        element_2.click()
+        try:
+            element_1 = driver.find_element_by_id('js-erotic-confirm')
+            element_1.click()
+        except NoSuchElementException:
+            element_2 = driver.find_element_by_class_name(
+                'playerBlock__nbl-button_playerMainAction'
+                )
+            element_2.click()
         time.sleep(10)
 
         price_page = driver.page_source
         soup = BeautifulSoup(price_page, 'html.parser')
-        search = soup.find_all(class_='plateTile__caption')
-        for i in range(len(search)):
-            search_2 = re.findall(r'\d', search[i].text)
-            search_3 = ''.join(search_2)
-            print(search_3 + '₽')
+        search_prices = soup.find_all(class_='plateTile__caption')
+
+        price_buy_hd = re.findall(r'\d', search_prices[0].text)
+        price_buy_sd = re.findall(r'\d', search_prices[1].text)
+        price_rent_hd = re.findall(r'\d', search_prices[2].text)
+        price_rent_sd = re.findall(r'\d', search_prices[3].text)
+
+        print(f"Купить фильм в HD/SD качестве - {(''.join(price_buy_hd))}₽/{(''.join(price_buy_sd))}₽, арендовать - {(''.join(price_rent_hd))}₽/{(''.join(price_rent_sd))}₽. При аренде фильма у Вас будет 30 дней, чтобы начать просмотр фильма, и 48 часов, чтобы закончить его.")
+
     return False
 
 
