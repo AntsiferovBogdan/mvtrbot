@@ -1,4 +1,5 @@
 import requests
+import time
 import settings
 
 from bs4 import BeautifulSoup
@@ -20,24 +21,26 @@ def get_url_ivi(html_ivi):
         soup = BeautifulSoup(html_ivi, 'html.parser')
         search = soup.find('li', class_='gallery__item').find('a')
         list_ivi = []
+
         if search:
             list_ivi.append(search['href'])
         watch_ivi = 'ivi.ru' + list_ivi[0]
-        print(f'Смотрите фильм {user_input.capitalize()} в онлайн-кинотеатре ivi: {watch_ivi}')
+        print(f'Смотрите {user_input.capitalize()} в онлайн-кинотеатре ivi: {watch_ivi}')
 
         driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL)
         driver.get('http://' + watch_ivi)
         element = driver.find_element_by_id('js-erotic-confirm')
         element.click()
-        element = driver.find_element_by_xpath(
-            "//button[@data-test='buy_content']"
+        element = driver.find_element_by_class_name(
+            'playerBlock__nbl-button_playerMainAction'
             )
-        element.click()
+        time.sleep(3)
+        print(element)
 
-        price_page = driver.page_source
-        soup = BeautifulSoup(price_page, 'html.parser')
-        search = soup.find(class_='plateTile__caption')
-        print(search)
+        # price_page = driver.page_source
+        # soup = BeautifulSoup(price_page, 'html.parser')
+        # search = soup.find(class_='plateTile__caption')
+        # print(search)
     return False
 
 
@@ -50,32 +53,32 @@ def get_url_megogo(html_megogo):
         if search:
             list_megogo.append(search['href'])
         watch_megogo = 'megogo.ru' + list_megogo[0]
-        print(f'Смотрите фильм {user_input.capitalize()} в онлайн-кинотеатре megogo: {watch_megogo}')
+        print(f'Смотрите {user_input.capitalize()} в онлайн-кинотеатре megogo: {watch_megogo}')
 
         driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL)
         driver.get('http://' + watch_megogo)
         element = driver.find_element_by_xpath(
             "//button[@class='btn type-fill watch']"
             )
-        element.click()
+        time.sleep(5)
+        print(element)
 
-        price_page = driver.page_source
-        soup = BeautifulSoup(price_page, 'html.parser')
-        search = soup.find(class_='plateTile__caption')
-        print(search)
+        # price_page = driver.page_source
+        # soup = BeautifulSoup(price_page, 'html.parser')
+        # search = soup.find(class_='plateTile__caption')
+        # print(search)
     return False
 
 
 user_input = input()
-user_input_del_spaces = user_input.split()
-user_input_no_spaces = '+'.join(user_input_del_spaces)
+user_input_fix = '+'.join(user_input.split())
 
 html_ivi = get_html(
-    'https://www.ivi.ru/search/?q=' + user_input_no_spaces
+    'https://www.ivi.ru/search/?q=' + user_input_fix
     )
-html_megogo = get_html(
-    'https://megogo.ru/ru/search-extended?q=' + user_input_no_spaces
-    )
+# html_megogo = get_html(
+    # 'https://megogo.ru/ru/search-extended?q=' + user_input_fix
+    # )
 
 get_url_ivi(html_ivi)
-get_url_megogo(html_megogo)
+# get_url_megogo(html_megogo)
