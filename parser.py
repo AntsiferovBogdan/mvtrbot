@@ -1,3 +1,4 @@
+import re
 import requests
 import time
 import settings
@@ -29,18 +30,21 @@ def get_url_ivi(html_ivi):
 
         driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL)
         driver.get('http://' + watch_ivi)
-        element = driver.find_element_by_id('js-erotic-confirm')
-        element.click()
-        element = driver.find_element_by_class_name(
+        element_1 = driver.find_element_by_id('js-erotic-confirm')
+        element_1.click()
+        element_2 = driver.find_element_by_class_name(
             'playerBlock__nbl-button_playerMainAction'
             )
-        time.sleep(3)
-        print(element)
+        element_2.click()
+        time.sleep(10)
 
-        # price_page = driver.page_source
-        # soup = BeautifulSoup(price_page, 'html.parser')
-        # search = soup.find(class_='plateTile__caption')
-        # print(search)
+        price_page = driver.page_source
+        soup = BeautifulSoup(price_page, 'html.parser')
+        search = soup.find_all(class_='plateTile__caption')
+        for i in range(len(search)):
+            search_2 = re.findall(r'\d', search[i].text)
+            search_3 = ''.join(search_2)
+            print(search_3 + '₽')
     return False
 
 
