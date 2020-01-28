@@ -18,6 +18,13 @@ def get_user_emoji(user_data):
 
 def get_keyboard():
     my_keyboard = ReplyKeyboardMarkup(
-        [['Зарегистрироваться']], resize_keyboard=True
+        [['Зарегистрироваться'], ['Найти фильм']], resize_keyboard=True
+        )
+    return my_keyboard
+
+
+def get_confirm_keyboard():
+    my_keyboard = ReplyKeyboardMarkup(
+        [['Да'], ['Нет']], resize_keyboard=True
         )
     return my_keyboard
