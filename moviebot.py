@@ -8,8 +8,9 @@ from handlers import (greet_user, registration_start,
                       registration_get_email, dontknow
                       )
 
-import settings
+from parser import correct_movie, get_url_ivi, searching_start
 
+import settings
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
@@ -27,11 +28,20 @@ def main():
 
     registration = ConversationHandler(
         entry_points=[(MessageHandler(Filters.regex('Зарегистрироваться'),
-                      registration_start))
+                      registration_start)),
+                      (MessageHandler(Filters.regex('Найти фильм'),
+                       searching_start))
                       ],
         states={
             'email': [MessageHandler(Filters.text, registration_get_email)
-                      ]
+                      ],
+            'ivi': [MessageHandler(Filters.text, get_url_ivi)
+                    ],
+            'confirm': [(MessageHandler(Filters.regex('Да'),
+                        correct_movie)),
+                        (MessageHandler(Filters.regex('Нет'),
+                         registration_start))
+                        ]
         },
         fallbacks=[MessageHandler(
                                   Filters.photo | Filters.video |
