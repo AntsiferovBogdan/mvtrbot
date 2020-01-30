@@ -8,7 +8,7 @@ from handlers import (greet_user, registration_start,
                       registration_get_email, dontknow
                       )
 
-from parser import correct_movie, get_url_ivi, searching_start
+from parser import incorrect_movie, get_url_ivi, search_movie, searching_start
 
 import settings
 
@@ -35,12 +35,12 @@ def main():
         states={
             'email': [MessageHandler(Filters.text, registration_get_email)
                       ],
-            'ivi': [MessageHandler(Filters.text, get_url_ivi)
-                    ],
+            'search_movie': [MessageHandler(Filters.text, search_movie)
+                             ],
             'confirm': [(MessageHandler(Filters.regex('Да'),
-                        correct_movie)),
+                        get_url_ivi)),
                         (MessageHandler(Filters.regex('Нет'),
-                         registration_start))
+                         incorrect_movie))
                         ]
         },
         fallbacks=[MessageHandler(

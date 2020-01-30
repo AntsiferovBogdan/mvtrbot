@@ -8,3 +8,4 @@ __pycache__/
 *.db
 create_db.py
 chromedriver
+black.py

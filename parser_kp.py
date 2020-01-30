@@ -20,19 +20,21 @@ def get_html(url):
 
 def get_url_kp(html_kp):
     if html_kp:
+        i = 0
         soup = BeautifulSoup(html_kp, 'html.parser')
-        search_info = soup.find(class_='name')
+        search_info_all = soup.find(class_='P94G9b')
+        print(search_info_all)
         global info
         info = ''.join(re.findall(r'[а-я А-Я0-9]', search_info.text))
-        search_poster = soup.find(class_='pic').find(class_="js-serp-metrika")
+        search_poster = soup.find_all(class_='pic')
+        search_poster = search_poster[i].find(class_="js-serp-metrika")
         global poster
         poster = search_poster['data-id']
         print(
             f"Вас интересует данный фильм? {info[:-5]}, {info[-4:]} https://st.kp.yandex.net/images/film_iphone/iphone360_{poster}.jpg",
             'reply_markup=get_confirm_keyboard()'
             )
-        return 'confirm'
-    return False
+    return 'confirm'
 
 
 def correct_movie(html_kp_2):
@@ -61,7 +63,7 @@ def correct_movie(html_kp_2):
 
 user_input = input()
 user_input_fix = '+'.join(user_input.split())
-url = 'https://www.kinopoisk.ru/index.php?kp_query=' + user_input_fix
+url = 'https://www.google.com/search?q=' + user_input_fix
 html_kp = get_html(url)
 get_url_kp(html_kp)
 html_kp_2 = get_html('https://www.kinopoisk.ru/film/' + poster)
