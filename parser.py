@@ -10,6 +10,8 @@ from utils import get_confirm_keyboard, get_keyboard
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
 from telegram import ReplyKeyboardRemove
 
 
@@ -69,57 +71,82 @@ def get_url_ivi(bot, update):
         'Ищу цены, подождите, пожалуйста...',
         reply_markup=ReplyKeyboardRemove()
         )
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get(settings.GOOGLE_CHROME_BIN)
+    chrome_options = Options()
     chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path=os.environ.get(settings.CHROMEDRIVER_PATH), chrome_options=chrome_options)
+    driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL, options=chrome_options)
     driver.get('http://' + url_ivi)
+    time.sleep(5)
     logging.info
-    #try:
-        #element_0 = driver.find_element_by_class_name(
-                #'fullscreen-popup__close-view-button'
-                #)
-        #element_0.click()
-    #finally:
+
     try:
         element_1 = driver.find_element_by_id('js-erotic-confirm')
         element_1.click()
+    except NoSuchElementException:
+        element_0 = driver.find_element_by_class_name('fullscreen-popup_has-close-view-button')
+        element_0.click()
+
     finally:
-        element_2 = driver.find_element_by_class_name(
-            'playerBlock__nbl-button_playerMainAction'
-            )
-        element_2.click()
-    time.sleep(7)
-    price_page = driver.page_source
-    soup = BeautifulSoup(price_page, 'html.parser')
-    subscribe = soup.find('h1')
-    subscribe_in = ''.join((re.findall(r'[а-яА-Я]', subscribe.text)))
-    if 'Подписка' in subscribe_in:
-        update.message.reply_text(
-            'Данный фильм доступен по подписке ivi. Также Вы можете приобрести его в HD/SD качестве за 399/299₽.',
-            reply_markup=get_keyboard()
-            )
-        return ConversationHandler.END
-    else:
+        time.sleep(3)
         price_page = driver.page_source
         soup = BeautifulSoup(price_page, 'html.parser')
-        search_prices = soup.find_all(class_='plateTile__caption')
+        search_bell = soup.find_all(class_='nbl-button__primaryText')
+        search_bell_in = ''.join((re.findall(r'[а-я А-Я]', search_bell[1].text)))
+        if 'Сообщить о появлении' in search_bell_in:
+            update.message.reply_text(
+                'К сожалению, данный фильм отсутствует в онлайн-кинотеатре на текущий момент.',
+                reply_markup=get_keyboard()
+                )
+            return ConversationHandler.END
 
-        price_buy_hd = re.findall(r'\d', search_prices[0].text)
-        price_buy_sd = re.findall(r'\d', search_prices[1].text)
-        price_rent_hd = re.findall(r'\d', search_prices[2].text)
-        price_rent_sd = re.findall(r'\d', search_prices[3].text)
+        try:
+            element_2 = driver.find_element_by_class_name(
+                'playerBlock__nbl-button_playerMainAction'
+                )
+            element_2.click()
+            time.sleep(3)
 
-        update.message.reply_text(
-            f"Смотрите фильм '{info}' в онлайн-кинотеатре ivi: {url_ivi}"
-            )
-        update.message.reply_text(
-            f"Купить фильм в HD/SD качестве - {(''.join(price_buy_hd))}₽/{(''.join(price_buy_sd))}₽, арендовать - {(''.join(price_rent_hd))}₽/{(''.join(price_rent_sd))}₽. При аренде фильма у Вас будет 30 дней, чтобы начать просмотр фильма, и 48 часов, чтобы закончить его.",
-            reply_markup=get_keyboard()
-            )
-        return ConversationHandler.END
+            price_page = driver.page_source
+            soup = BeautifulSoup(price_page, 'html.parser')
+            subscribe = soup.find('h1')
+            subscribe_in = ''.join((re.findall(r'[а-яА-Я]', subscribe.text)))
+            if 'Подписка' in subscribe_in:
+                update.message.reply_text(
+                    'Данный фильм доступен по подписке ivi. Также Вы можете приобрести его в HD/SD качестве за 399/299₽.',
+                    reply_markup=get_keyboard()
+                    )
+                return ConversationHandler.END
+
+            else:
+                price_page = driver.page_source
+                soup = BeautifulSoup(price_page, 'html.parser')
+                search_prices = soup.find_all(class_='plateTile__caption')
+                update.message.reply_text(
+                                f"Смотрите фильм '{info}' в онлайн-кинотеатре ivi: {url_ivi}"
+                                )
+                price_buy_hd = re.findall(r'\d', search_prices[0].text)
+                update.message.reply_text(
+                                f"Купить фильм в HD-качестве - {(''.join(price_buy_hd))}₽"
+                                )
+                price_buy_sd = re.findall(r'\d', search_prices[1].text)
+                update.message.reply_text(
+                                f"Купить фильм в SD-качестве - {(''.join(price_buy_sd))}₽"
+                                )
+                price_rent_hd = re.findall(r'\d', search_prices[2].text)
+                update.message.reply_text(
+                                f"Арендовать фильм в HD-качестве - {(''.join(price_rent_hd))}₽"
+                                )
+                price_rent_sd = re.findall(r'\d', search_prices[3].text)
+                update.message.reply_text(
+                                f"Арендовать фильм в SD-качестве - {(''.join(price_rent_sd))}₽"
+                                )
+                update.message.reply_text(
+                    f"При аренде фильма у Вас будет 30 дней, чтобы начать просмотр фильма, и 48 часов, чтобы закончить его.",
+                    reply_markup=get_keyboard()
+                    )
+                return ConversationHandler.END
+        except NoSuchElementException:
+            return 'greet_user'
 
 
 def incorrect_movie(bot, update):
