@@ -11,6 +11,14 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from telegram import ReplyKeyboardRemove
 
+GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
+CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.binary_location = GOOGLE_CHROME_PATH
+
 
 def searching_start(bot, update):
     update.message.reply_text(
@@ -68,7 +76,9 @@ def get_url_ivi(bot, update):
         'Ищу цены, подождите, пожалуйста...',
         reply_markup=ReplyKeyboardRemove()
         )
-    driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL)
+    driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH,
+                              chrome_options=chrome_options
+                              )
     driver.get('http://' + url_ivi)
     #try:
         #element_0 = driver.find_element_by_class_name(
