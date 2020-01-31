@@ -47,7 +47,7 @@ def search_movie(bot, update):
         search_info_all = soup.find_all(class_='nbl-slimPosterBlock__title')
         search_info = search_info_all[i]
         global info
-        info = ''.join(re.findall(r'[а-я А-Я0-9]', search_info.text))
+        info = ''.join(re.findall(r'[а-я А-Я 0-9]', search_info.text))
         global search_poster
         search_poster = soup.find_all('li', class_='gallery__item')
         search_url = search_poster[i].find('a')
