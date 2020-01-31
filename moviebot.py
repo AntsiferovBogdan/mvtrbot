@@ -10,7 +10,7 @@ from handlers import (greet_user, registration_start,
 
 from parser import incorrect_movie, get_url_ivi, search_movie, searching_start
 
-import settings
+# import settings
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,

@@ -1,7 +1,7 @@
 import logging
 import re
 import requests
-import settings
+# import settings
 import time
 
 from telegram.ext import ConversationHandler
