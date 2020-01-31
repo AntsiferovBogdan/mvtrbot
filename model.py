@@ -14,7 +14,7 @@ class Users(Base):
     user_email = Column(Integer, unique=True)
 
 
-# engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
+engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
 
 Session = sessionmaker(bind=engine)
 session = Session()
