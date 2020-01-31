@@ -1,1 +1,1 @@
-web: python moviebot.py
+bot: python moviebot.py
