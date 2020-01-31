@@ -4,12 +4,13 @@ from telegram.ext import (Updater, CommandHandler,
                           MessageHandler, Filters, ConversationHandler
                           )
 
-from handlers import (greet_user, dontknow
+from handlers import (greet_user, registration_start,
+                      registration_get_email, dontknow
                       )
 
 from parser import incorrect_movie, get_url_ivi, search_movie, searching_start
 
-# import settings
+import settings
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
@@ -26,11 +27,14 @@ def main():
     dp.add_handler(CommandHandler('start', greet_user, pass_user_data=True))
 
     registration = ConversationHandler(
-        entry_points=[
+        entry_points=[(MessageHandler(Filters.regex('Зарегистрироваться'),
+                      registration_start)),
                       (MessageHandler(Filters.regex('Найти фильм'),
                        searching_start))
                       ],
         states={
+            'email': [MessageHandler(Filters.text, registration_get_email)
+                      ],
             'search_movie': [MessageHandler(Filters.text, search_movie)
                              ],
             'confirm': [(MessageHandler(Filters.regex('Да'),

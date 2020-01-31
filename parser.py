@@ -1,7 +1,7 @@
 import logging
 import re
 import requests
-# import settings
+import settings
 import time
 
 from telegram.ext import ConversationHandler
@@ -77,8 +77,7 @@ def get_url_ivi(bot, update):
         reply_markup=ReplyKeyboardRemove()
         )
     driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH,
-                              chrome_options=chrome_options
-                              )
+                              chrome_options=chrome_options)
     driver.get('http://' + url_ivi)
     #try:
         #element_0 = driver.find_element_by_class_name(
