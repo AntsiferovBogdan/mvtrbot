@@ -79,6 +79,7 @@ def get_url_ivi(bot, update):
     driver = webdriver.Chrome(execution_path=CHROMEDRIVER_PATH,
                               chrome_options=chrome_options)
     driver.get('http://' + url_ivi)
+    logging.info
     #try:
         #element_0 = driver.find_element_by_class_name(
                 #'fullscreen-popup__close-view-button'
