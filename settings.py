@@ -15,6 +15,10 @@ USER_EMOJI = [':smiley_cat:', ':smiling_imp:', ':panda_face:',
 
 SQLALCHEMY_DATABASE_URL = 'sqlite:///' + os.path.join(basedir, 'users_db.db')
 
+CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
+
+GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
+
 # CHROME_DRIVER_URL = '/Users/dianaraddats/projects/MovieBot/chromedriver'
 
 # SAFARI_DRIVER_URL = '/usr/bin/safaridriver'
