@@ -101,6 +101,7 @@ def get_url_ivi(bot, update):
             'Данный фильм доступен по подписке ivi. Также Вы можете приобрести его в HD/SD качестве за 399/299₽.',
             reply_markup=get_keyboard()
             )
+        return ConversationHandler.END
     else:
         price_page = driver.page_source
         soup = BeautifulSoup(price_page, 'html.parser')
@@ -118,7 +119,7 @@ def get_url_ivi(bot, update):
             f"Купить фильм в HD/SD качестве - {(''.join(price_buy_hd))}₽/{(''.join(price_buy_sd))}₽, арендовать - {(''.join(price_rent_hd))}₽/{(''.join(price_rent_sd))}₽. При аренде фильма у Вас будет 30 дней, чтобы начать просмотр фильма, и 48 часов, чтобы закончить его.",
             reply_markup=get_keyboard()
             )
-    return ConversationHandler.END
+        return ConversationHandler.END
 
 
 def incorrect_movie(bot, update):

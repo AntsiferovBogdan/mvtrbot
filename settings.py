@@ -13,7 +13,7 @@ USER_EMOJI = [':smiley_cat:', ':smiling_imp:', ':panda_face:',
               ':new_moon_with_face:', ':crown:', ':alien:'
               ]
 
-SQLALCHEMY_DATABASE_URL = 'sqlite:///' + os.path.join(basedir, 'users_db.db')
+SQLALCHEMY_DATABASE_URL = 'sqlite:///' + os.path.join(basedir, 'users_db.db'
 
 # CHROME_DRIVER_URL = '/Users/dianaraddats/projects/MovieBot/chromedriver'
 
