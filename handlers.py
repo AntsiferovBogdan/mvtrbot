@@ -17,7 +17,6 @@ logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
 
 
 def greet_user(bot, update, user_data):
-    ConversationHandler.END
     emoji = get_user_emoji(user_data)
     text = 'Привет, {} {}'.format(update.message.chat.first_name, emoji)
     update.message.reply_text(text, reply_markup=get_keyboard())
