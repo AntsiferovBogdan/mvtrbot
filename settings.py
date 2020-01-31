@@ -15,10 +15,6 @@ USER_EMOJI = [':smiley_cat:', ':smiling_imp:', ':panda_face:',
 
 SQLALCHEMY_DATABASE_URL = 'sqlite:///' + os.path.join(basedir, 'users_db.db'
 
-CHROME_DRIVER_URL = '/Users/dianaraddats/projects/MovieBot/chromedriver'
+# CHROME_DRIVER_URL = '/Users/dianaraddats/projects/MovieBot/chromedriver'
 
-SAFARI_DRIVER_URL = '/usr/bin/safaridriver'
-
-MONGO_LINK = 'mongodb+srv://mvtrbot:Rainn17.@cluster0-yanny.mongodb.net/mvtrbot?retryWrites=true&w=majority'
-
-MONGO_DB = 'mvtrbot'
+# SAFARI_DRIVER_URL = '/usr/bin/safaridriver'
