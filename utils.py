@@ -3,7 +3,7 @@ from random import choice
 from emoji import emojize
 from telegram import ReplyKeyboardMarkup
 
-# import settings
+import settings
 
 
 def get_user_emoji(user_data):
