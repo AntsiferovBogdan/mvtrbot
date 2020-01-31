@@ -19,6 +19,6 @@ CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
 
 GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
 
-# CHROME_DRIVER_URL = '/Users/dianaraddats/projects/MovieBot/chromedriver'
+CHROME_DRIVER_URL = '/Users/dianaraddats/projects/MovieBot/chromedriver'
 
 # SAFARI_DRIVER_URL = '/usr/bin/safaridriver'
