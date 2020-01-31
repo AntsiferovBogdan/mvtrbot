@@ -1,6 +1,7 @@
 import logging
 
 from model import Users, session
+from parser import searching_start
 from utils import get_keyboard, get_user_emoji
 
 from sqlalchemy import create_engine
@@ -42,6 +43,8 @@ def registration_get_email(bot, update):
                      update.message.text
                      )
         add_user(bot, update)
+    elif user_email == 'Найти фильм':
+        searching_start(bot, update)
     else:
         update.message.reply_text('Проверьте корректность введенного e-mail')
         return 'email'

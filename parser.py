@@ -5,8 +5,9 @@ import requests
 import settings
 import time
 
-from telegram.ext import ConversationHandler
 from utils import get_confirm_keyboard, get_keyboard
+
+from telegram.ext import ConversationHandler
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -39,10 +40,12 @@ def search_movie(bot, update):
                  update.message.chat.id,
                  update.message.text
                  )
+
     user_input_fix = '+'.join(update.message.text.split())
     url = 'https://www.ivi.ru/search/?q=' + user_input_fix
     html_ivi = get_html(url)
     global i
+    i = 0
     if html_ivi:
         global soup
         soup = BeautifulSoup(html_ivi, 'html.parser')
@@ -74,7 +77,9 @@ def get_url_ivi(bot, update):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL, options=chrome_options)
+    driver = webdriver.Chrome(
+        executable_path=settings.CHROME_DRIVER_URL, options=chrome_options
+        )
     driver.get('http://' + url_ivi)
     time.sleep(5)
     logging.info
@@ -126,19 +131,19 @@ def get_url_ivi(bot, update):
                                 )
                 price_buy_hd = re.findall(r'\d', search_prices[0].text)
                 update.message.reply_text(
-                                f"Купить фильм в HD-качестве - {(''.join(price_buy_hd))}₽"
+                                f"Купить фильм в HD-качестве - {(''.join(price_buy_hd))}₽",
                                 )
                 price_buy_sd = re.findall(r'\d', search_prices[1].text)
                 update.message.reply_text(
-                                f"Купить фильм в SD-качестве - {(''.join(price_buy_sd))}₽"
+                                f"Купить фильм в SD-качестве - {(''.join(price_buy_sd))}₽",
                                 )
                 price_rent_hd = re.findall(r'\d', search_prices[2].text)
                 update.message.reply_text(
-                                f"Арендовать фильм в HD-качестве - {(''.join(price_rent_hd))}₽"
+                                f"Арендовать фильм в HD-качестве - {(''.join(price_rent_hd))}₽",
                                 )
                 price_rent_sd = re.findall(r'\d', search_prices[3].text)
                 update.message.reply_text(
-                                f"Арендовать фильм в SD-качестве - {(''.join(price_rent_sd))}₽"
+                                f"Арендовать фильм в SD-качестве - {(''.join(price_rent_sd))}₽",
                                 )
                 update.message.reply_text(
                     f"При аренде фильма у Вас будет 30 дней, чтобы начать просмотр фильма, и 48 часов, чтобы закончить его.",

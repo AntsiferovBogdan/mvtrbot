@@ -24,7 +24,7 @@ def get_keyboard():
 
 
 def get_confirm_keyboard():
-    my_keyboard = ReplyKeyboardMarkup(
+    my_keyboard_2 = ReplyKeyboardMarkup(
         [['Да'], ['Нет']], resize_keyboard=True
         )
-    return my_keyboard
+    return my_keyboard_2
