@@ -8,7 +8,7 @@ from telegram import ReplyKeyboardRemove
 from telegram.ext import ConversationHandler
 
 import re
-import settings
+# import settings
 
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
