@@ -8,7 +8,8 @@ from handlers import (greet_user, registration_start,
                       registration_get_email, dontknow
                       )
 
-from parser import incorrect_movie, get_url_ivi, search_movie, searching_start
+from parser import (incorrect_movie, get_url_ivi, get_url_megogo,
+                    search_movie, searching_start)
 
 import settings
 
@@ -38,7 +39,7 @@ def main():
             'search_movie': [MessageHandler(Filters.text, search_movie)
                              ],
             'confirm': [(MessageHandler(Filters.regex('Да'),
-                        get_url_ivi)),
+                        get_url_megogo)),
                         (MessageHandler(Filters.regex('Нет'),
                          incorrect_movie))
                         ]

@@ -8,3 +8,6 @@ __pycache__/
 create_db.py
 chromedriver
 black.py
+compare.py
+settings.py
+parser_kp.py
