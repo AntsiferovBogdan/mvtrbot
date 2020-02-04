@@ -179,7 +179,7 @@ def get_price_megogo(bot, update):
     find_subscribe = soup_megogo_price.find('p', class_='stub-description')
     if 'доступен' in find_subscribe.text:
         update.message.reply_text(
-            f'Фильм доступен по подписке'  # через re вытянуть полный текст с мегого
+            f'Фильм доступен по подписке'  # через re вытянуть полный текст с мегого!
             )
     else:
         search_price = soup.find_all(class_='pQualityItemPrice__value')
