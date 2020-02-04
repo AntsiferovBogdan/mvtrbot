@@ -1,11 +1,7 @@
 import re
 import requests
-import settings
-import time
-
 
 from bs4 import BeautifulSoup
-from selenium import webdriver
 
 
 def get_html(url):
@@ -18,53 +14,30 @@ def get_html(url):
         return False
 
 
-def get_url_kp(html_kp):
-    if html_kp:
-        i = 0
-        soup = BeautifulSoup(html_kp, 'html.parser')
-        search_info_all = soup.find(class_='P94G9b')
-        print(search_info_all)
-        global info
-        info = ''.join(re.findall(r'[а-я А-Я0-9]', search_info.text))
-        search_poster = soup.find_all(class_='pic')
-        search_poster = search_poster[i].find(class_="js-serp-metrika")
-        global poster
-        poster = search_poster['data-id']
-        print(
-            f"Вас интересует данный фильм? {info[:-5]}, {info[-4:]} https://st.kp.yandex.net/images/film_iphone/iphone360_{poster}.jpg",
-            'reply_markup=get_confirm_keyboard()'
-            )
-    return 'confirm'
-
-
-def correct_movie(html_kp_2):
-    if html_kp_2:
-        print(
-            'Ищу цены, подождите, пожалуйста...',
-            'reply_markup=ReplyKeyboardRemove()'
-            )
-        driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_URL)
-        driver.get('https://www.kinopoisk.ru/film/' + poster)
-        element_1 = driver.find_element_by_class_name('kinopoisk-watch-online-button-partial-component kinopoisk-watch-online-button-partial-component_theme_desktop')
-        element_1.click()
-    time.sleep(5)
-
-    price_page = driver.page_source
-    soup = BeautifulSoup(price_page, 'html.parser')
-    search_prices = soup.find_all(class_='PriceBlock__content--1RjcV')
-    print(search_prices)
-    price_buy_hd = re.findall(r'\d', search_prices[0].text)
-    price_rent_hd = re.findall(r'\d', search_prices[2].text)
-
-    print(
-        f"Смотрите фильм '{info[:-5]}' в онлайн-кинотеатре КиноПоиск HD: {price_page}"
+def get_url_kp(url):
+    html_kp = get_html(url)
+    i = 2
+    soup = BeautifulSoup(html_kp, 'html.parser')
+    search_info = soup.find_all('p', class_='name')
+    search_title = search_info[i].find('a')
+    title = ''.join(re.findall(r'[а-я А-Я0-9I]', search_title.text))
+    search_year = search_info[i].find('span')
+    year = ''.join(re.findall(r'[0-9]', search_year.text))
+    parsing_poster = soup.find_all(class_='pic')
+    search_poster = parsing_poster[i].find(class_="js-serp-metrika").get(
+        'data-id'
         )
+    poster = 'https://st.kp.yandex.net/images/film_iphone/iphone360_' + search_poster + '.jpg'
+    search_director = soup.find_all('i', class_='director')
+    director = (''.join(re.findall(r'[а-я А-Я]', search_director[0].text))).split('реж ')
+    print(
+        f"Вас интересует данный фильм? {title}, {year} {poster}",
+        'reply_markup=get_confirm_keyboard()'
+        )
+    return 'confirm'
 
 
 user_input = input()
 user_input_fix = '+'.join(user_input.split())
-url = 'https://www.google.com/search?q=' + user_input_fix
-html_kp = get_html(url)
-get_url_kp(html_kp)
-html_kp_2 = get_html('https://www.kinopoisk.ru/film/' + poster)
-correct_movie(html_kp_2)
+url = 'https://www.kinopoisk.ru/index.php?kp_query=' + user_input_fix
+get_url_kp(url)
