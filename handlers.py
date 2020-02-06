@@ -37,11 +37,7 @@ def registration_get_email(bot, update, user_data, chat_data):
                          r'^[\w\.]+[-\w]+@+([\w]([-\w]{0,61}[\w])\.)+[a-zA-Z]{2,6}$'
                          )
     if re.match(pattern, user_email):
-        logging.info('user: %s, chat_id: %s, email: %s',
-                     update.message.chat.username,
-                     update.message.chat.id,
-                     update.message.text
-                     )
+        logging.info(f'user: {update.message.chat.username}, chat_id: {update.message.chat.id}, email: {update.message.text}')
         add_user(bot, update)
     elif user_email == 'Найти фильм':
         searching_start(bot, update, user_data)
