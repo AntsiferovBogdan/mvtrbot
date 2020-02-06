@@ -16,7 +16,7 @@ from selenium.webdriver.chrome.options import Options
 from telegram import ReplyKeyboardRemove
 
 
-def searching_start(bot, update):
+def searching_start(bot, update, user_data, chat_data):
     update.message.reply_text(
                               'Введите название фильма',
                               reply_markup=ReplyKeyboardRemove()
@@ -34,7 +34,7 @@ def get_html(url):
         return False
 
 
-def search_movie(bot, update):
+def search_movie(bot, update, user_data, chat_data):
     logging.info('user: %s, chat_id: %s, movie: %s',
                  update.message.chat.username,
                  update.message.chat.id,
@@ -42,7 +42,7 @@ def search_movie(bot, update):
                  )
 
     user_input_fix = '+'.join(update.message.text.split())
-    url = 'https://www.kinopoisk.ru/index.php?kp_query=' + user_input_fix
+    url = f'https://www.kinopoisk.ru/index.php?kp_query={user_input_fix}'
     html_kp = get_html(url)
     global i
     i = 0
@@ -59,7 +59,7 @@ def search_movie(bot, update):
         search_poster_kp = soup.find_all(class_='pic')
         search_poster_kp = search_poster_kp[i].find(
             class_="js-serp-metrika").get('data-id')
-        poster_kp = 'https://st.kp.yandex.net/images/film_iphone/iphone360_' + search_poster_kp + '.jpg'
+        poster_kp = f'https://st.kp.yandex.net/images/film_iphone/iphone360_{search_poster_kp}.jpg'
         global search_director_kp
         search_director_kp = soup.find_all('i', class_='director')
         global director_kp
@@ -73,22 +73,22 @@ def search_movie(bot, update):
         return 'confirm'
 
 
-def incorrect_movie(bot, update):
-    global i
+def incorrect_movie(bot, update, user_data, chat_data):
+    #global i
     i += 1
     search_title_kp = search_info_kp[i].find('a')
-    global title_kp
+    #global title_kp
     title_kp = ''.join(re.findall(r'[а-я А-Я0-9I]', search_title_kp.text))
     search_year_kp = search_info_kp[i].find('span')
-    global year_kp
+    #global year_kp
     year_kp = ''.join(re.findall(r'[0-9]', search_year_kp.text))
     search_poster_kp = soup.find_all(class_='pic')
     search_poster_kp = search_poster_kp[i].find(class_="js-serp-metrika").get(
         'data-id'
         )
-    global poster_kp
-    poster_kp = 'https://st.kp.yandex.net/images/film_iphone/iphone360_' + search_poster_kp + '.jpg'
-    global director_kp
+    #global poster_kp
+    poster_kp = f'https://st.kp.yandex.net/images/film_iphone/iphone360_{search_poster_kp}.jpg'
+    #global director_kp
     director_kp = (''.join(re.findall(
         r'[а-я А-Я]', search_director_kp[i].text))
         ).split('реж ')
@@ -99,9 +99,9 @@ def incorrect_movie(bot, update):
     return 'confirm'
 
 
-def get_url_megogo(bot, update):
+def get_url_megogo(bot, update, user_data, chat_data):
     title_fix = '+'.join(title_kp.split())
-    url = 'https://megogo.ru/ru/search-extended?q=' + title_fix
+    url = f'https://megogo.ru/ru/search-extended?q={title_fix}'
     html_megogo = get_html(url)
     soup_megogo = BeautifulSoup(html_megogo, 'html.parser')
 
@@ -109,9 +109,9 @@ def get_url_megogo(bot, update):
     global m
     title_megogo = search_info_megogo[m].find('a').find('img').get('alt')
     global url_megogo
-    url_megogo = 'https://megogo.ru' + search_info_megogo[m].find('a').get('href')
+    url_megogo = f"https://megogo.ru{search_info_megogo[m].find('a').get('href')}"
 
-    director_url_megogo = url_megogo + '?video_view_tab=cast'
+    director_url_megogo = f'{url_megogo}?video_view_tab=cast'
     director_html_megogo = get_html(director_url_megogo)
     director_parsing_megogo = BeautifulSoup(
         director_html_megogo, 'html.parser'
@@ -129,9 +129,9 @@ def get_url_megogo(bot, update):
         get_url_megogo(bot, update)
 
 
-def get_url_ivi(bot, update):
+def get_url_ivi(bot, update, user_data, chat_data):
     title_fix = '+'.join(title_kp.split())
-    url = 'https://www.ivi.ru/search/?q=' + title_fix
+    url = f'http://www.ivi.ru/search/?q={title_fix}'
     print(url)
     html_ivi = get_html(url)
     soup_ivi = BeautifulSoup(html_ivi, 'html.parser')
@@ -144,7 +144,7 @@ def get_url_ivi(bot, update):
     global url_ivi
     search_url_ivi = soup_ivi.find_all(class_='gallery__item')
     url_ivi = 'ivi.ru' + search_url_ivi[iv].find('a').get('href')
-    director_url_ivi = url_ivi + '?video_view_tab=cast'
+    director_url_ivi = f'{url_ivi}?video_view_tab=cast'
     director_html_ivi = get_html(director_url_ivi)
     director_parsing_ivi = BeautifulSoup(
         director_html_ivi, 'html.parser'
@@ -162,7 +162,7 @@ def get_url_ivi(bot, update):
         #get_all_urls(bot, update)
 
 
-def get_price_megogo(bot, update):
+def get_price_megogo(bot, update, user_data, chat_data):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")

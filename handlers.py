@@ -17,13 +17,13 @@ logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     )
 
 
-def greet_user(bot, update, user_data):
+def greet_user(bot, update, user_data, chat_data):
     emoji = get_user_emoji(user_data)
-    text = 'Привет, {} {}'.format(update.message.chat.first_name, emoji)
+    text = f'Привет, {update.message.chat.first_name} {emoji}'
     update.message.reply_text(text, reply_markup=get_keyboard())
 
 
-def registration_start(bot, update):
+def registration_start(bot, update, user_data, chat_data):
     update.message.reply_text(
                               'Введите свой e-mail',
                               reply_markup=ReplyKeyboardRemove()
@@ -31,7 +31,7 @@ def registration_start(bot, update):
     return 'email'
 
 
-def registration_get_email(bot, update):
+def registration_get_email(bot, update, user_data, chat_data):
     user_email = update.message.text
     pattern = re.compile(
                          r'^[\w\.]+[-\w]+@+([\w]([-\w]{0,61}[\w])\.)+[a-zA-Z]{2,6}$'
@@ -44,18 +44,18 @@ def registration_get_email(bot, update):
                      )
         add_user(bot, update)
     elif user_email == 'Найти фильм':
-        searching_start(bot, update)
+        searching_start(bot, update, user_data)
     else:
         update.message.reply_text('Проверьте корректность введенного e-mail')
         return 'email'
 
 
-def dontknow(bot, update):
-    update.message.reply_text('Проверьте корректность введенного e-mail')
+def check_email(bot, update):
+    update.message.reply_text('Введите, пожалуйста, текст.')
     return 'email'
 
 
-def add_user(bot, update):
+def add_user(bot, update, user_data, chat_data):
     user_email = update.message.text
     user_id = update.message.chat.id
 
