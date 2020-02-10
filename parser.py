@@ -103,63 +103,64 @@ def get_url_megogo(bot, update, user_data, chat_data):
     title_fix = '+'.join(title_kp.split())
     url = f'https://megogo.ru/ru/search-extended?q={title_fix}'
     html_megogo = get_html(url)
-    soup_megogo = BeautifulSoup(html_megogo, 'html.parser')
+    if html_megogo:
+        soup_megogo = BeautifulSoup(html_megogo, 'html.parser')
+        search_info_megogo = soup_megogo.find_all('div', {'class': 'thumb'})
+        global m
+        title_megogo = search_info_megogo[m].find('a').find('img').get('alt')
+        global url_megogo
+        url_megogo = f"https://megogo.ru{search_info_megogo[m].find('a').get('href')}"
 
-    search_info_megogo = soup_megogo.find_all('div', {'class': 'thumb'})
-    global m
-    title_megogo = search_info_megogo[m].find('a').find('img').get('alt')
-    global url_megogo
-    url_megogo = f"https://megogo.ru{search_info_megogo[m].find('a').get('href')}"
+        director_url_megogo = f'{url_megogo}?video_view_tab=cast'
+        director_html_megogo = get_html(director_url_megogo)
+        director_parsing_megogo = BeautifulSoup(
+            director_html_megogo, 'html.parser'
+            )
+        director_search_megogo = director_parsing_megogo.find(
+            class_='video-persons type-other').find(class_='video-person-name')
+        director_megogo = ''.join(re.findall(
+            r'[а-я А-Я]', director_search_megogo.text)
+            )
 
-    director_url_megogo = f'{url_megogo}?video_view_tab=cast'
-    director_html_megogo = get_html(director_url_megogo)
-    director_parsing_megogo = BeautifulSoup(
-        director_html_megogo, 'html.parser'
-        )
-    director_search_megogo = director_parsing_megogo.find(
-        class_='video-persons type-other').find(class_='video-person-name')
-    director_megogo = ''.join(re.findall(
-        r'[а-я А-Я]', director_search_megogo.text)
-        )
-
-    if title_kp == title_megogo and director_kp[1] == director_megogo:
-        get_price_megogo(bot, update)
-    else:
-        m += 1
-        get_url_megogo(bot, update)
+        if title_kp == title_megogo and director_kp[1] == director_megogo:
+            get_price_megogo(bot, update)
+        else:
+            m += 1
+            get_url_megogo(bot, update)
+    return False
 
 
 def get_url_ivi(bot, update, user_data, chat_data):
     title_fix = '+'.join(title_kp.split())
     url = f'http://www.ivi.ru/search/?q={title_fix}'
-    print(url)
     html_ivi = get_html(url)
-    soup_ivi = BeautifulSoup(html_ivi, 'html.parser')
+    if html_ivi:
+        soup_ivi = BeautifulSoup(html_ivi, 'html.parser')
 
-    search_title_ivi = soup_ivi.find_all(class_='nbl-slimPosterBlock__title')
-    global iv
-    title_ivi = ''.join(re.findall(
-        r'[а-я А-Я]', search_title_ivi[iv].text)
-        )
-    global url_ivi
-    search_url_ivi = soup_ivi.find_all(class_='gallery__item')
-    url_ivi = 'ivi.ru' + search_url_ivi[iv].find('a').get('href')
-    director_url_ivi = f'{url_ivi}?video_view_tab=cast'
-    director_html_ivi = get_html(director_url_ivi)
-    director_parsing_ivi = BeautifulSoup(
-        director_html_ivi, 'html.parser'
-        )
-    director_search_ivi = director_parsing_ivi.find(
-        class_='personsLine__link')
-    director_ivi = ''.join(re.findall(
-        r'[а-я А-Я]', director_search_ivi.text)
-        )
-    print(director_ivi)
-    #if title_kp == title_megogo and director_kp[1] == director_megogo:
-        #get_price_megogo(bot, update)
-    #else:
-        #iv += 1
-        #get_all_urls(bot, update)
+        search_title_ivi = soup_ivi.find_all(class_='nbl-slimPosterBlock__title')
+        global iv
+        title_ivi = ''.join(re.findall(
+            r'[а-я А-Я]', search_title_ivi[iv].text)
+            )
+        global url_ivi
+        search_url_ivi = soup_ivi.find_all(class_='gallery__item')
+        url_ivi = 'ivi.ru' + search_url_ivi[iv].find('a').get('href')
+        url = url_ivi
+        print(url)
+        html_director = get_html(url)
+        soup_ivi_director = BeautifulSoup(html_director, 'html.parser')
+        director_search_ivi = soup_ivi_director.find_all(class_='gallery__item')
+        print(director_search_ivi)
+        director_ivi = ''.join(re.findall(
+            r'[а-я А-Я]', director_search_ivi.text)
+            )
+        print(director_ivi)
+        #if title_kp == title_ivi and director_kp[1] == director_ivi:
+            #get_price_ivi(bot, update)
+        #else:
+            #iv += 1
+            #get_all_urls(bot, update)
+    return False
 
 
 def get_price_megogo(bot, update, user_data, chat_data):
