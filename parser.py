@@ -179,7 +179,8 @@ def get_price_megogo(bot, update, user_data, chat_data):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     driver = webdriver.Chrome(
-        executable_path=settings.CHROME_DRIVER_URL
+        executable_path=settings.CHROME_DRIVER_URL,
+        options=chrome_options
         )
     driver.get(url_megogo)
     time.sleep(3)
@@ -214,8 +215,9 @@ def get_price_ivi(bot, update, user_data, chat_data):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     driver = webdriver.Chrome(
-        executable_path=settings.CHROME_DRIVER_URL)
-    # options=chrome_options
+        executable_path=settings.CHROME_DRIVER_URL,
+        options=chrome_options
+        )
     driver.get(url_ivi)
     time.sleep(3)
 
