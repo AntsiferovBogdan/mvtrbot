@@ -66,7 +66,6 @@ def search_movie(bot, update, user_data, chat_data):
         director_kp = (''.join(re.findall(
             r'[а-яА-Я]', search_director_kp[i].text))
             ).split('реж')
-        print(director_kp)
         update.message.reply_text(
             f'Вас интересует данный фильм? {title_kp}, {year_kp} {poster_kp}',
             reply_markup=get_confirm_keyboard()
@@ -122,7 +121,6 @@ def get_url_megogo(bot, update, user_data, chat_data):
         director_megogo = ''.join(re.findall(
             r'[а-я А-Я]', director_search_megogo.text)
             )
-        print(director_megogo)
         if title_kp == title_megogo and director_kp[1] == director_megogo:
             return get_price_megogo(bot, update, user_data, chat_data)
         else:
@@ -156,10 +154,6 @@ def get_url_ivi(bot, update, user_data, chat_data):
         director_ivi = (''.join(re.findall(
             r'[а-я А-Я]', director_search_ivi.text))
             ).split('режисср')
-        print(title_kp)
-        print(title_ivi)
-        print(director_kp[1])
-        print(director_ivi[0])
 
         if title_kp == title_ivi and director_kp[1] == director_ivi[0]:
             return get_price_ivi(bot, update, user_data, chat_data)
@@ -219,8 +213,6 @@ def get_price_ivi(bot, update, user_data, chat_data):
         executable_path='/app/.chromedriver/bin/chromedriver',
         chrome_options=chrome_options
         )
-    # '/app/.chromedriver/bin/chromedriver'
-    # settings.CHROME_DRIVER_URL
     driver.get(url_ivi)
     time.sleep(3)
 
