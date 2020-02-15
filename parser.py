@@ -214,7 +214,7 @@ def get_price_ivi(bot, update, user_data, chat_data):
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
-    chrome_options.binary_location = '/app/.apt/usr/bin/google_chrome'
+    chrome_options.binary_location = '/app/.apt/usr/bin/google-chrome'
     driver = webdriver.Chrome(
         executable_path='/app/.chromedriver/bin/chromedriver',
         chrome_options=chrome_options
