@@ -245,61 +245,61 @@ def get_price_ivi(bot, update, user_data, chat_data):
                 reply_markup=get_keyboard()
                 )
             return ConversationHandler.END
-        else:
-            try:
-                element_2 = driver.find_element_by_class_name(
-                    'playerBlock__nbl-button_playerMainAction'
-                    )
-                element_2.click()
-                time.sleep(5)
 
+        try:
+            element_2 = driver.find_element_by_class_name(
+                'playerBlock__nbl-button_playerMainAction'
+                )
+            element_2.click()
+            time.sleep(5)
+
+            price_page = driver.page_source
+            soup = BeautifulSoup(price_page, 'html.parser')
+            subscribe = soup.find('h1')
+            subscribe_in = ''.join((re.findall(r'[а-яА-Я]', subscribe.text)))
+            if 'Подписка' in subscribe_in:
+                update.message.reply_text(
+                    f"Смотрите '{title_kp}' в онлайн-кинотеатре ivi: {url_ivi}"
+                    )
+                update.message.reply_text(
+                    'Данный фильм доступен по подписке ivi.',
+                    )
+                update.message.reply_text(
+                    'Также Вы можете купить его в HD/SD качестве за 399/299₽.',
+                    reply_markup=get_keyboard()
+                    )
+                return ConversationHandler.END
+
+            else:
                 price_page = driver.page_source
                 soup = BeautifulSoup(price_page, 'html.parser')
-                subscribe = soup.find('h1')
-                subscribe_in = ''.join((re.findall(r'[а-яА-Я]', subscribe.text)))
-                if 'Подписка' in subscribe_in:
-                    update.message.reply_text(
-                        f"Смотрите '{title_kp}' в онлайн-кинотеатре ivi: {url_ivi}"
-                        )
-                    update.message.reply_text(
-                        'Данный фильм доступен по подписке ivi.',
-                        )
-                    update.message.reply_text(
-                        'Также Вы можете купить его в HD/SD качестве за 399/299₽.',
-                        reply_markup=get_keyboard()
-                        )
-                    return ConversationHandler.END
-
-                else:
-                    price_page = driver.page_source
-                    soup = BeautifulSoup(price_page, 'html.parser')
-                    search_prices = soup.find_all(class_='plateTile__caption')
-                    update.message.reply_text(
-                                    f"Смотрите фильм '{title_kp}' в онлайн-кинотеатре ivi: {url_ivi}"
-                                    )
-                    price_buy_hd = re.findall(r'\d', search_prices[0].text)
-                    update.message.reply_text(
-                                    f"Купить фильм в HD-качестве - {(''.join(price_buy_hd))}₽",
-                                    )
-                    price_buy_sd = re.findall(r'\d', search_prices[1].text)
-                    update.message.reply_text(
-                                    f"Купить фильм в SD-качестве - {(''.join(price_buy_sd))}₽",
-                                    )
-                    price_rent_hd = re.findall(r'\d', search_prices[2].text)
-                    update.message.reply_text(
-                                    f"Арендовать фильм в HD-качестве - {(''.join(price_rent_hd))}₽",
-                                    )
-                    price_rent_sd = re.findall(r'\d', search_prices[3].text)
-                    update.message.reply_text(
-                                    f"Арендовать фильм в SD-качестве - {(''.join(price_rent_sd))}₽",
-                                    )
-                    update.message.reply_text(
-                        f"При аренде фильма у Вас будет 30 дней, чтобы начать просмотр фильма, и 48 часов, чтобы закончить его.",
-                        reply_markup=get_keyboard()
-                        )
-                    return ConversationHandler.END
-            except NoSuchElementException:
-                return 'greet_user'
+                search_prices = soup.find_all(class_='plateTile__caption')
+                update.message.reply_text(
+                                f"Смотрите фильм '{title_kp}' в онлайн-кинотеатре ivi: {url_ivi}"
+                                )
+                price_buy_hd = re.findall(r'\d', search_prices[0].text)
+                update.message.reply_text(
+                                f"Купить фильм в HD-качестве - {(''.join(price_buy_hd))}₽",
+                                )
+                price_buy_sd = re.findall(r'\d', search_prices[1].text)
+                update.message.reply_text(
+                                f"Купить фильм в SD-качестве - {(''.join(price_buy_sd))}₽",
+                                )
+                price_rent_hd = re.findall(r'\d', search_prices[2].text)
+                update.message.reply_text(
+                                f"Арендовать фильм в HD-качестве - {(''.join(price_rent_hd))}₽",
+                                )
+                price_rent_sd = re.findall(r'\d', search_prices[3].text)
+                update.message.reply_text(
+                                f"Арендовать фильм в SD-качестве - {(''.join(price_rent_sd))}₽",
+                                )
+                update.message.reply_text(
+                    f"При аренде фильма у Вас будет 30 дней, чтобы начать просмотр фильма, и 48 часов, чтобы закончить его.",
+                    reply_markup=get_keyboard()
+                    )
+                return ConversationHandler.END
+        except NoSuchElementException:
+            return 'greet_user'
 
 
 i = 0
