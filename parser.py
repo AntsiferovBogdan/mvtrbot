@@ -211,7 +211,7 @@ def get_price_ivi(bot, update, user_data, chat_data):
         reply_markup=ReplyKeyboardRemove()
         )
 
-    chrome_options = Options()
+    chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.binary_location = '/app/.apt/usr/bin/google_chrome'
