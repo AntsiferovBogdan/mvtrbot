@@ -32,4 +32,4 @@
 
 .. code-block:: text
 
-    python bot.py
+    python moviebot.py
