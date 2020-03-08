@@ -74,7 +74,6 @@ def search_movie(bot, update, user_data, chat_data):
             reply_markup=get_confirm_keyboard()
             )
         return 'confirm'
-    return False
 
 
 def incorrect_movie(bot, update, user_data, chat_data):
@@ -130,7 +129,6 @@ def get_url_megogo(bot, update, user_data, chat_data):
         else:
             m += 1
             return get_url_megogo(bot, update, user_data, chat_data)
-    return False
 
 
 def get_url_ivi(bot, update, user_data, chat_data):
@@ -164,7 +162,6 @@ def get_url_ivi(bot, update, user_data, chat_data):
         else:
             iv += 1
             return get_url_ivi(bot, update, user_data, chat_data)
-    return False
 
 
 def get_price_megogo(bot, update, user_data, chat_data):
