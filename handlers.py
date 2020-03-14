@@ -1,13 +1,11 @@
-import logging
-
 from model import Users, session
 from parser import searching_start
-from utils import get_keyboard, get_user_emoji
-
 from sqlalchemy import create_engine
 from telegram import ReplyKeyboardRemove
 from telegram.ext import ConversationHandler
+from utils import get_keyboard, get_user_emoji
 
+import logging
 import re
 import settings
 

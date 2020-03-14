@@ -1,20 +1,16 @@
-import logging
-import os
-import re
-import requests
-import settings
-import time
-
-from utils import get_confirm_keyboard, get_keyboard
-
-from telegram.ext import ConversationHandler
-
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from telegram import ReplyKeyboardRemove
+from telegram.ext import ConversationHandler
+from utils import get_confirm_keyboard, get_keyboard
 
+import logging
+import re
+import requests
+import settings
+import time
 
 def searching_start(bot, update, user_data, chat_data):
     update.message.reply_text(

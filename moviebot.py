@@ -1,16 +1,13 @@
-import logging
-
-from telegram.ext import (Updater, CommandHandler,
-                          MessageHandler, Filters, ConversationHandler
-                          )
-
 from handlers import (check_email, greet_user,
-                      registration_start, registration_get_email
-                      )
+                      registration_start, registration_get_email)
 
-from parser import (incorrect_movie, get_url_ivi, get_url_megogo,
+from parser import (get_url_megogo, get_url_ivi, incorrect_movie,
                     search_movie, searching_start)
 
+from telegram.ext import (CommandHandler, ConversationHandler, Filters,
+                          MessageHandler, Updater)
+
+import logging
 import settings
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',

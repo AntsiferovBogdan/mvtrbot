@@ -1,6 +1,5 @@
-from random import choice
-
 from emoji import emojize
+from random import choice
 from telegram import ReplyKeyboardMarkup
 
 import settings
